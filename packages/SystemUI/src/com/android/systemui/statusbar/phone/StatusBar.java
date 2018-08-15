@@ -1379,6 +1379,7 @@ public class StatusBar extends SystemUI implements DemoMode,
         filter.addAction(DevicePolicyManager.ACTION_SHOW_DEVICE_MONITORING_DIALOG);
         filter.addAction("android.intent.action.SCREEN_CAMERA_GESTURE");
         filter.addAction(OmniUtils.ACTION_DISMISS_KEYGUARD);
+        filter.addAction("com.android.systemui.ACTION_DISMISS_KEYGUARD");
         context.registerReceiverAsUser(mBroadcastReceiver, UserHandle.ALL, filter, null, null);
 
         IntentFilter demoFilter = new IntentFilter();
@@ -3727,6 +3728,11 @@ public class StatusBar extends SystemUI implements DemoMode,
                 }
 
                 onCameraLaunchGestureDetected(StatusBarManager.CAMERA_LAUNCH_SOURCE_SCREEN_GESTURE);
+            }else if ("com.android.systemui.ACTION_DISMISS_KEYGUARD".equals(action)) {
+                if (intent.hasExtra("launch")) {
+                    Intent launchIntent = (Intent) intent.getParcelableExtra("launch");
+                    startActivityDismissingKeyguard(launchIntent, true, true);
+                }
             }
         }
     };
